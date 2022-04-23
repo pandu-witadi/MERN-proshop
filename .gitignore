@@ -1,3 +1,4 @@
 node_modules
 client_react/node_modules
 client_react/build
+.env
