@@ -6,6 +6,8 @@ import { Row, Col } from 'react-bootstrap'
 
 import Product from '../components/Product'
 import { listProducts } from '../store/actions/product'
+import Message from '../components/Message'
+import Loader from '../components/Loader'
 
 
 const HomeScreen = () => {
@@ -20,8 +22,10 @@ const HomeScreen = () => {
        <>
             <h1>Latest Product</h1>
             { loading ? (
-                <h2>loading</h2>
-            ) : error ? ( <h2>{error}</h2> ) : (
+                <Loader />
+            ) : error ? (
+                <Message variant='danger'>{error}</Message> 
+            ) : (
                 <Row>
                     { products.map( (product) => (
                         <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
