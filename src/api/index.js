@@ -1,18 +1,20 @@
 //
 //
 const router = require('express').Router()
-// const { authRequired } = require('../middleware/auth')
-//
-//
-// // -----------------------------------------------------------------------------
-// const users = require('./users')
-// router.post('/users', users.register)
-//
-// // -----------------------------------------------------------------------------
+const { authRequired } = require('../middleware/auth')
+
+
+// -----------------------------------------------------------------------------
+const users = require('./users')
+router.post('/users', users.register)
+router.post('/users/login', users.login)
+router.get('/users/profile', authRequired, users.currentUser)
+
+// -----------------------------------------------------------------------------
 // const auth = require('./auth')
 // router.get('/auth', authRequired, auth.currentUser)
 // router.post('/auth', auth.login)
-//
+
 // // -----------------------------------------------------------------------------
 // const profile = require('./profile')
 // router.get('/profile/me', authRequired, profile.currentProfile)
@@ -28,8 +30,8 @@ const router = require('express').Router()
 
 // -----------------------------------------------------------------------------
 const products = require('./products')
-router.get('/products', products.getAllProducts)
-router.get('/products/:id', products.getProduct)
+router.get('/products', products.getProducts)
+router.get('/products/:id', products.getProductById)
 
 
 // -----------------------------------------------------------------------------

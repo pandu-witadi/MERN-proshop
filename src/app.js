@@ -4,18 +4,15 @@ const express = require('express')
 const path = require('path')
 const cors = require('cors')
 
-const { notFound, errorHandler } = require('./middleware/errorMiddleware')
+const { notFound, errorHandler } = require('./middleware/error')
 const CF = require('./config/default')
 
 
 const app = express()
 
 app.use( cors() )
-// parse json request body
-app.use(express.json())
-
-// parse urlencoded request body
-app.use(express.urlencoded({ extended: true }))
+app.use( express.json() )
+app.use( express.urlencoded({ extended: true }) )
 
 
 //these 3 lines make sure that Angular and express app are coming from the same server

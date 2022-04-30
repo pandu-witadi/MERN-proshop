@@ -22,7 +22,7 @@ let CF = {
     jwt: {
        saltLength: 10,
        secret_str : "this-auth-token",
-       token_exp:  1 * 60 // 2 minutes
+       token_exp:  10 * 60 // 2 minutes
     },
     frontEnd: {
         path: '../client_react/build'
