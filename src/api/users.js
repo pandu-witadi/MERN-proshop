@@ -25,13 +25,13 @@ const register = asyncHandler( async (req, res) => {
         name: name
     })
     if (!user) {
-        res.status(40)
+        res.status(401)
         throw new Error('invalid user data')
     } else {
         let accessToken = createToken({ userId: user._id })
         let { hashPassword, __v, ...others } = user._doc
 
-        return res.status(200).json({
+        return res.status(201).json({
             ...others,
             accessToken: accessToken
         })
@@ -40,7 +40,6 @@ const register = asyncHandler( async (req, res) => {
 
 
 const login = asyncHandler( async (req, res) => {
-
     const { email, password } = req.body
 
     let user = await User.findOne({ email: email })
@@ -57,15 +56,56 @@ const login = asyncHandler( async (req, res) => {
     })
 })
 
-const currentUser = asyncHandler( async (req, res) => {
-        let user = await User.findById(req.userId).select('-password')
+const getUserById = asyncHandler(async (req, res) => {
+    console.log(req.params.id)
+    const user = await User.findById(req.params.id)
+    if (user) {
         let { hashPassword, __v, ...others } = user._doc
         return res.status(200).json({ ...others })
+    } else {
+        res.status(404)
+        throw new Error('User not found')
+    }
 })
 
+
+const getUserProfile = asyncHandler( async (req, res) => {
+    let user = await User.findById(req.userId)
+    if (user) {
+        let { hashPassword, __v, ...others } = user._doc
+        return res.status(200).json({ ...others })
+    } else {
+        res.status(404)
+        throw new Error('User not found')
+    }
+})
+
+const updateUserProfile = asyncHandler( async (req, res) => {
+    let user = await User.findById(req.userId)
+    if (user) {
+        let { email, password, name } = req.body
+        user.name = name || user.name
+        user.email = email || user.email
+        if (password) {
+            user.hashPassword = await passwordHash(password)
+        }
+        let updatedUser = await user.save()
+        let accessToken = createToken({ userId: updatedUser._id })
+        let { hashPassword, __v, ...others } = updatedUser._doc
+        return res.status(200).json({
+            ...others,
+            accessToken: accessToken
+        })
+    } else {
+        res.status(404)
+        throw new Error('User not found')
+    }
+})
 
 module.exports = {
     register,
     login,
-    currentUser
+    getUserById,
+    getUserProfile,
+    updateUserProfile
 }
