@@ -3,6 +3,9 @@
 const router = require('express').Router()
 const { authRequired } = require('../middleware/auth')
 
+// -----------------------------------------------------------------------------
+const test = require('./test')
+router.get('/test', test.test_get)
 
 // -----------------------------------------------------------------------------
 const users = require('./users')
