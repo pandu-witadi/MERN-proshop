@@ -15,8 +15,6 @@ const authRequired = asyncHandler( async(req, res, next) => {
 
     let accessToken = req.get('x-access-token')
 
-    // console.log('accessToken', accessToken)
-
     if(!accessToken) {
         res.status(401)
         throw new Error('No authentication token, access denied')

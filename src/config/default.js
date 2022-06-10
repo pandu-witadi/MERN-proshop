@@ -22,7 +22,10 @@ let CF = {
     jwt: {
        saltLength: 10,
        secret_str : "this-auth-token",
-       token_exp:  10 * 60 // 2 minutes
+       token_exp:  60 * 60 // 2 minutes
+    },
+    PAYPAL: {
+        CLIENT_ID : 'AbV4DsXYRoJUeL-qzOyRQAxgdp8hRUgmVeesKbKTCzzPyj1FdvbHnbuYc5sl_1qzF96xRyqqEPF9SiQv'
     },
     frontEnd: {
         path: '../client_react/build'

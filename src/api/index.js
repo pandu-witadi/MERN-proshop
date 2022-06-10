@@ -20,6 +20,17 @@ const products = require('./products')
 router.get('/products', products.getProducts)
 router.get('/products/:id', products.getProductById)
 
+// -----------------------------------------------------------------------------
+const orders = require('./orders')
+router.post('/orders', authRequired, orders.addOrderItems)
+router.get('/orders/myorders', authRequired, orders.getMyOrders)
+router.get('/orders/:id', authRequired, orders.getOrderById)
+router.put('/orders/:id/pay', authRequired, orders.updateOrderToPaidById)
+
+// -----------------------------------------------------------------------------
+const credential = require('./credential')
+router.get('/credential/paypal', credential.getPaypalClientId)
+
 
 // -----------------------------------------------------------------------------
 module.exports = router

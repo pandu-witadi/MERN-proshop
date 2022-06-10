@@ -9,7 +9,9 @@ const {
     createToken
 } = require('../utils/auth')
 
-
+// desc:    register new user
+// route:   POST /api/users
+// access:  public
 const register = asyncHandler( async (req, res) => {
     const { email, password, name } = req.body
 
@@ -38,7 +40,9 @@ const register = asyncHandler( async (req, res) => {
     }
 })
 
-
+// desc:    login user
+// route:   POST /api/users/login
+// access:  public
 const login = asyncHandler( async (req, res) => {
     const { email, password } = req.body
 

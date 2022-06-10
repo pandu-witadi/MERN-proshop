@@ -7,7 +7,7 @@ const CF = require('../config/default')
 test_get = async (req, res) => {
     try {
         curDate = new Date()
-        res.send({
+        return res.send({
             appName: CF.app.name,
             port: CF.server.port,
             appVersion: CF.app.version,
@@ -16,7 +16,7 @@ test_get = async (req, res) => {
             random: Math.random()
         })
     } catch (err) {
-        res.status(500).send(err)
+        return res.status(500).send(err)
     }
 }
 
