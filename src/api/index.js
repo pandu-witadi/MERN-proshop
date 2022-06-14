@@ -1,7 +1,7 @@
 //
 //
 const router = require('express').Router()
-const { authRequired } = require('../middleware/auth')
+const { authRequired, admin } = require('../middleware/auth')
 
 // -----------------------------------------------------------------------------
 const test = require('./test')
@@ -13,7 +13,10 @@ router.post('/users', users.register)
 router.post('/users/login', users.login)
 router.get('/users/profile', authRequired, users.getUserProfile)
 router.put('/users/profile', authRequired, users.updateUserProfile)
-router.get('/users/:id', users.getUserById)
+router.get('/users', authRequired, admin, users.getUsers)
+router.delete('/users/:id', authRequired, admin, users.deleteUser)
+router.get('/users/:id', authRequired, admin, users.getUserById)
+router.put('/users/:id', authRequired, admin, users.updateUser)
 
 // -----------------------------------------------------------------------------
 const products = require('./products')
