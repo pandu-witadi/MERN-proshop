@@ -9,6 +9,7 @@ const {
     createToken
 } = require('../utils/auth')
 
+
 // desc:    register new user
 // route:   POST /api/users
 // access:  public
@@ -29,15 +30,14 @@ const register = asyncHandler( async (req, res) => {
     if (!user) {
         res.status(401)
         throw new Error('invalid user data')
-    } else {
-        const accessToken = createToken(user._id)
-        const { hashPassword, __v, ...others } = user._doc
-
-        return res.status(201).json({
-            ...others,
-            accessToken: accessToken
-        })
     }
+    const accessToken = createToken(user._id)
+    const { hashPassword, __v, ...others } = user._doc
+    return res.status(201).json({
+        ...others,
+        accessToken: accessToken
+    })
+
 })
 
 // desc:    login user
@@ -46,14 +46,14 @@ const register = asyncHandler( async (req, res) => {
 const login = asyncHandler( async (req, res) => {
     const { email, password } = req.body
 
-    let user = await User.findOne({ email: email })
+    const user = await User.findOne({ email: email })
     if (!user || !(await comparePassword(password, user.hashPassword))) {
         res.status(401)
         throw new Error('invalid credentials')
     }
 
-    let accessToken = createToken(user._id)
-    let { hashPassword, __v, ...others } = user._doc
+    const accessToken = createToken(user._id)
+    const { hashPassword, __v, ...others } = user._doc
     return res.status(200).json({
         ...others,
         accessToken: accessToken
@@ -66,36 +66,35 @@ const login = asyncHandler( async (req, res) => {
 // route:   GET /api/users/profile
 // access:  private
 const getUserProfile = asyncHandler( async (req, res) => {
-    let user = await User.findById(req.user._id)
-    if (user) {
-        let { hashPassword, __v, ...others } = user._doc
-        return res.status(200).json({ ...others })
-    } else {
+    const user = await User.findById(req.user._id)
+    if (!user) {
         res.status(404)
         throw new Error('User not found')
     }
+    const { hashPassword, __v, ...others } = user._doc
+    return res.status(200).json({ ...others })
 })
+
 
 const updateUserProfile = asyncHandler( async (req, res) => {
     let user = await User.findById(req.user._id)
-    if (user) {
-        let { email, password, name } = req.body
-        user.name = name || user.name
-        user.email = email || user.email
-        if (password) {
-            user.hashPassword = await passwordHash(password)
-        }
-        let updatedUser = await user.save()
-        let accessToken = createToken(updatedUser._id)
-        let { hashPassword, __v, ...others } = updatedUser._doc
-        return res.status(200).json({
-            ...others,
-            accessToken: accessToken
-        })
-    } else {
+    if (!user) {
         res.status(404)
         throw new Error('User not found')
     }
+    let { email, password, name } = req.body
+    user.name = name || user.name
+    user.email = email || user.email
+    if (password) {
+        user.hashPassword = await passwordHash(password)
+    }
+    let updatedUser = await user.save()
+    let accessToken = createToken(updatedUser._id)
+    let { hashPassword, __v, ...others } = updatedUser._doc
+    return res.status(200).json({
+        ...others,
+        accessToken: accessToken
+    })
 })
 
 // desc:    get all users
@@ -119,7 +118,7 @@ const deleteUser = asyncHandler( async (req, res) => {
     return res.json({ 'message': 'user removed'})
 })
 
-// desc:    delete get user by id
+// desc:    get user by id
 // route:   GET /api/users/:id
 // access:  private/admin
 const getUserById = asyncHandler(async (req, res) => {
