@@ -23,6 +23,8 @@ const products = require('./products')
 router.get('/products', products.getProducts)
 router.get('/products/:id', products.getProductById)
 router.delete('/products/:id', authRequired, admin, products.deleteProduct)
+router.post('/products', authRequired, admin, products.createProduct)
+router.put('/products/:id', authRequired, admin, products.updateProduct)
 
 // -----------------------------------------------------------------------------
 const orders = require('./orders')

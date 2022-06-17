@@ -10,8 +10,10 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {
     listProducts,
-    deleteProduct
+    deleteProduct,
+    createProduct
 } from '../store/actions/product'
+import { PRODUCT_CREATE_RESET } from '../store/constants/product'
 
 
 const ProductListScreen = ({ history, match }) => {
@@ -24,25 +26,47 @@ const ProductListScreen = ({ history, match }) => {
     const { userInfo } = userLogin
 
     const productDelete = useSelector( state => state.productDelete)
-    const { loading: loadingDelete, error: errorDelete, success: successDelete } = productDelete
+    const {
+        loading: loadingDelete,
+        error: errorDelete,
+        success: successDelete
+    } = productDelete
+
+    const productCreate = useSelector( state => state.productCreate)
+    const {
+        loading: loadingCreate,
+        error: errorCreate,
+        success: successCreate,
+        product: createdProduct
+     } = productCreate
+
 
     useEffect( () => {
-        if (userInfo && userInfo.isAdmin) {
-            dispatch( listProducts() )
-        } else {
-            history.push('/login')
-        }
+        dispatch({ type: PRODUCT_CREATE_RESET })
 
-    }, [dispatch, history, successDelete])
+        if (!userInfo.isAdmin)
+            history.push('/login')
+
+        if (successCreate) {
+            console.log(createdProduct)
+            history.push(`/admin/product/${createdProduct._id}/edit`)
+        } else
+            dispatch( listProducts() )
+    }, [
+        dispatch,
+        history,
+        successDelete,
+        successCreate,
+        createdProduct
+    ])
 
     const deleteHandler = (id) => {
-        if (window.confirm('Are you sure')) {
+        if (window.confirm('Are you sure'))
             dispatch( deleteProduct(id) )
-        }
     }
 
     const createProductHandler = (product) => {
-
+        dispatch( createProduct() )
     }
 
     return (
@@ -59,6 +83,8 @@ const ProductListScreen = ({ history, match }) => {
             </Row>
             { loadingDelete && <Loader />}
             { errorDelete && <Message variant='danger'>{errorDelete}</Message>}
+            { loadingCreate && <Loader />}
+            { errorCreate && <Message variant='danger'>{errorCreate}</Message>}
             { loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : (
                 <Table striped bordered hover responsive className='table-sm'>
                     <thead>
@@ -83,7 +109,7 @@ const ProductListScreen = ({ history, match }) => {
                              <td>
                                 <LinkContainer to={`/admin/product/${product._id}/edit`}>
                                     <Button className='btn-sm' variant='light'>
-                                        <i className='fas fa-edit' style={{ color: 'red' }}></i>
+                                        <i className='fas fa-edit'></i>
                                     </Button>
                                 </LinkContainer>
                                 <Button
