@@ -15,13 +15,15 @@ app.use( express.json() )
 app.use( express.urlencoded({ extended: true }) )
 
 
-//these 3 lines make sure that Angular and express app are coming from the same server
+//these 3 lines make sure that Angular/VUe/React and express app are coming from the same server
 const frontEndPath = path.join(__dirname, CF.frontEnd.path)
 app.use(express.static(frontEndPath))
 app.get('/', function(req, res) {
     res.sendFile('index.html',  { root: frontEndPath } )
 })
 
+console.log(path.join(__dirname, '..', 'uploads'))
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')))
 
 // API
 app.use(CF.server.apiPath, require('./api/index'))

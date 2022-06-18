@@ -37,6 +37,13 @@ router.put('/orders/:id/pay', authRequired, orders.updateOrderToPaidById)
 const credential = require('./credential')
 router.get('/credential/paypal', credential.getPaypalClientId)
 
+// -----------------------------------------------------------------------------
+const uploads = require('./uploads')
+router.post('/upload', uploads.single('image'), (req, res) => {
+    return res.send(`/${req.file.path}`)
+})
+
+
 
 // -----------------------------------------------------------------------------
 module.exports = router
