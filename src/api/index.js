@@ -32,6 +32,8 @@ router.post('/orders', authRequired, orders.addOrderItems)
 router.get('/orders/myorders', authRequired, orders.getMyOrders)
 router.get('/orders/:id', authRequired, orders.getOrderById)
 router.put('/orders/:id/pay', authRequired, orders.updateOrderToPaidById)
+router.put('/orders/:id/deliver', authRequired, admin, orders.updateOrderToDelivered)
+router.get('/orders', authRequired, admin, orders.getOrders)
 
 // -----------------------------------------------------------------------------
 const credential = require('./credential')

@@ -24,6 +24,7 @@ import {
     PRODUCT_UPDATE_RESET
 } from '../constants/product'
 
+
 export const productListReducer = (
     state= { products: [] },
     action
