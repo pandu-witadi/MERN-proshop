@@ -25,6 +25,8 @@ router.get('/products/:id', products.getProductById)
 router.delete('/products/:id', authRequired, admin, products.deleteProduct)
 router.post('/products', authRequired, admin, products.createProduct)
 router.put('/products/:id', authRequired, admin, products.updateProduct)
+router.post('/products/:id/reviews', authRequired, products.createProductReview)
+
 
 // -----------------------------------------------------------------------------
 const orders = require('./orders')

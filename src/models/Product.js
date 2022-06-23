@@ -50,6 +50,7 @@ const objSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    reviews: [reviewSchema],
     rating: {
         type: Number,
         required: true,
